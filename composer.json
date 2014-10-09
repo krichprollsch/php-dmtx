@@ -1,0 +1,19 @@
+{
+    "name": "ptachoire/php-dmtx",
+    "description": "Datamatrix r/w based on libdmtx",
+    "version": "1.0.0",
+    "require": {
+        "symfony/process": "~2.5",
+        "symfony/options-resolver": "~2.5"
+    },
+    "autoload": {
+        "psr-0": { "Dmtx": "src/" }
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Pierre Tachoire",
+            "email": "pierre.tachoire@gmail.com"
+        }
+    ]
+}

@@ -8,9 +8,12 @@ class WriterTest extends TestCase
 {
     private $writer;
 
-    protected function setUp($options = array())
-    {
+    protected function setUp(
+        $options = array(),
+        $messages = array()
+    ) {
         $this->writer = new Writer($options);
+        $this->writer->encode($messages);
     }
 
     public function testEncodeShouldReturnWriterInstance()
@@ -63,20 +66,35 @@ class WriterTest extends TestCase
      * @dataProvider imageTestProvider
      */
     public function testDumpShouldReturnValidImage(
-        $options,
+        array $options,
         array $messages,
         $expected_filename
     ) {
-
-        $this->setUp($options);
-
-        foreach ($messages as $message) {
-            $this->writer->encode($message);
-        }
+        $this->setUp($options, $messages);
 
         $this->assertEquals(
             file_get_contents($expected_filename),
             $this->writer->dump()
+        );
+    }
+
+    /**
+     * @dataProvider imageTestProvider
+     */
+    public function testSaveAsShouldCreateValidFile(
+        array $options,
+        array $messages,
+        $expected_filename
+    ) {
+        $this->setUp($options, $messages);
+
+        $tmpfile = tempnam(sys_get_temp_dir(), 'dmtx-test-unit-').'.png';
+
+        $this->writer->saveAs($tmpfile);
+
+        $this->assertFileEquals(
+            $expected_filename,
+            $tmpfile
         );
     }
 }

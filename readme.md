@@ -24,6 +24,18 @@ echo $writer->encode('this is a message')
     ->dump();
 ```
 
+```
+use Dmtx\Reader
+
+$reader = new Reader();
+
+//decode message from data
+$reader->decode($encoded_value);
+
+//decode message from file 
+echo $reader->decodeFile('/tmp/image.png');
+```
+
 ## Test
 
 ```

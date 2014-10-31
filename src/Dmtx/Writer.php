@@ -4,13 +4,11 @@ namespace Dmtx;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Process\ProcessBuilder;
 
-class Writer
+class Writer extends AbstractDmtx
 {
     private $messages;
-    private $options;
-    private $arguments = array(
+    protected $arguments = array(
         'encoding',
         'module',
         'symbol-size',
@@ -80,13 +78,32 @@ class Writer
 
     public function encode($message)
     {
-        $this->messages[] = $message;
+        if (is_array($message)) {
+            $this->messages = $message;
+        } else {
+            $this->messages[] = $message;
+        }
+
         return $this;
     }
 
     public function dump()
     {
-        return $this->run();
+        return $this->run(
+            $this->getCmd(),
+            $this->getMessage()
+        );
+    }
+
+    public function saveAs($filename)
+    {
+        return $this->run(
+            $this->getCmd(),
+            $this->getMessage(),
+            array(
+                'output' => $filename
+            )
+        );
     }
 
     private function getMessage()
@@ -97,53 +114,14 @@ class Writer
         );
     }
 
-    private function run()
+    protected function getCmd()
     {
-        $builder = $this->getProcessBuilder();
-        $builder->setInput(
-            $this->getMessage()
-        );
-
-        $process = $builder->getProcess();
-        $process->run();
-
-        if (!$process->isSuccessful()) {
-            throw new \RuntimeException($process->getErrorOutput());
-        }
-
-        return $process->getOutput();
+        return 'dmtxwrite';
     }
 
-    private function getProcessBuilder()
+    protected function getArgument($argument)
     {
-        $builder = new ProcessBuilder();
-        $builder->add('dmtxwrite');
-        $builder->setTimeout($this->options['process-timeout']);
-        foreach ($this->arguments as $argument) {
-            try {
-                $builder->add(sprintf(
-                    '--%s=%s',
-                    $argument,
-                    $this->getArgument($argument)
-                ));
-            } catch (\InvalidArgumentException $ex) {}
-        }
-
-        return $builder;
-    }
-
-    private function getArgument($argument)
-    {
-        if (!isset($this->options[$argument])) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'No value defined into options for argument %s',
-                    $argument
-                )
-            );
-        }
-
-        $value = $this->options[$argument];
+        $value = parent::getArgument($argument);
 
         switch ($argument) {
             case 'encoding':

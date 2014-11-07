@@ -133,6 +133,14 @@ class Reader extends AbstractDmtx
         );
     }
 
+
+    public function processBuilder()
+    {
+        return $this->getProcessBuilder(
+            $this->getCmd()
+        );
+    }
+
     protected function getCmd()
     {
         return 'dmtxread';

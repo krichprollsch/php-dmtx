@@ -23,7 +23,7 @@ abstract class AbstractDmtx
         return $this->options[$argument];
     }
 
-    protected function getProcessBuilder($cmd, array $extras = array())
+    protected function getProcessBuilder($cmd, array $extras = array(), $input = null)
     {
         $builder = new ProcessBuilder();
         $builder->add($cmd);
@@ -55,6 +55,12 @@ abstract class AbstractDmtx
             }
         }
 
+        if (!is_null($input)) {
+            $builder->setInput(
+                $input
+            );
+        }
+
         return $builder;
     }
 
@@ -79,15 +85,10 @@ abstract class AbstractDmtx
 
     protected function run($cmd, $input = null, array $extras = array())
     {
-        $builder = $this->getProcessBuilder($cmd, $extras);
+        $process = $this
+            ->getProcessBuilder($cmd, $extras, $input)
+            ->getProcess();
 
-        if (!is_null($input)) {
-            $builder->setInput(
-                $input
-            );
-        }
-
-        $process = $builder->getProcess();
         $process->run();
 
         if (!$process->isSuccessful()) {

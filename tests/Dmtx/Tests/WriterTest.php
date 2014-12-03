@@ -3,10 +3,12 @@
 namespace Dmtx\Tests;
 
 use Dmtx\Writer;
+use Dmtx\Reader;
 
 class WriterTest extends TestCase
 {
     private $writer;
+    private $reader;
 
     protected function setUp(
         $options = array(),
@@ -14,6 +16,8 @@ class WriterTest extends TestCase
     ) {
         $this->writer = new Writer($options);
         $this->writer->encode($messages);
+
+        $this->reader = new Reader();
     }
 
     public function testEncodeShouldReturnWriterInstance()
@@ -46,7 +50,7 @@ class WriterTest extends TestCase
                     'format' => 'png'
                 ),
                 array('yo'),
-                dirname(__FILE__).'/rsc/yo.png'
+                'yo'
             ),
             'multiMessagesShouldBeValid' => array(
                 array(
@@ -57,7 +61,7 @@ class WriterTest extends TestCase
                     'message-separator' => ' '
                 ),
                 array('yo','this','is','a','message'),
-                dirname(__FILE__).'/rsc/yos.png'
+                'yo this is a message'
             )
         );
     }
@@ -68,13 +72,15 @@ class WriterTest extends TestCase
     public function testDumpShouldReturnValidImage(
         array $options,
         array $messages,
-        $expected_filename
+        $expected
     ) {
         $this->setUp($options, $messages);
 
         $this->assertEquals(
-            file_get_contents($expected_filename),
-            $this->writer->dump()
+            $expected,
+            $this->reader->decode(
+                $this->writer->dump()
+            )
         );
     }
 
@@ -84,7 +90,7 @@ class WriterTest extends TestCase
     public function testSaveAsShouldCreateValidFile(
         array $options,
         array $messages,
-        $expected_filename
+        $expected
     ) {
         $this->setUp($options, $messages);
 
@@ -92,9 +98,15 @@ class WriterTest extends TestCase
 
         $this->writer->saveAs($tmpfile);
 
-        $this->assertFileEquals(
-            $expected_filename,
-            $tmpfile
+        $this->assertFileExists($tmpfile);
+
+        $this->assertEquals(
+            $expected,
+            $this->reader->decode(
+                file_get_contents($tmpfile)
+            )
         );
+
+        unlink($tmpfile);
     }
 }

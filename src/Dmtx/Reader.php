@@ -8,7 +8,6 @@ use Symfony\Component\Process\ProcessBuilder;
 
 class Reader extends AbstractDmtx
 {
-    private $messages;
     protected $arguments = array(
         'newline',
         'unicode',
@@ -35,23 +34,14 @@ class Reader extends AbstractDmtx
         'shrink'
     );
 
-    public function __construct(array $options = array())
-    {
-        $this->messages = array();
-
-        $resolver = new OptionsResolver();
-        $this->setDefaultOptions($resolver);
-
-        $this->options = $resolver->resolve($options);
-    }
-
     protected function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
             'unicode' => true,
             'milliseconds' => 200,
             'symbol-size' => 'square-auto',
-            'process-timeout' => 600
+            'process-timeout' => 600,
+            'command' => 'dmtxread'
         ));
 
         $resolver->setOptional(array(
@@ -135,10 +125,5 @@ class Reader extends AbstractDmtx
         return $this->getProcessBuilder(
             $this->getCmd()
         );
-    }
-
-    protected function getCmd()
-    {
-        return 'dmtxread';
     }
 }

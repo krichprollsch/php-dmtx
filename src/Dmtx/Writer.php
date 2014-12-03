@@ -7,7 +7,6 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class Writer extends AbstractDmtx
 {
-    private $messages;
     protected $arguments = array(
         'encoding',
         'module',
@@ -17,16 +16,6 @@ class Writer extends AbstractDmtx
         'margin'
     );
 
-    public function __construct(array $options = array())
-    {
-        $this->messages = array();
-
-        $resolver = new OptionsResolver();
-        $this->setDefaultOptions($resolver);
-
-        $this->options = $resolver->resolve($options);
-    }
-
     protected function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
@@ -35,7 +24,8 @@ class Writer extends AbstractDmtx
             'symbol-size' => 'square-auto',
             'format' => 'png',
             'message-separator' => ' ',
-            'process-timeout' => 600
+            'process-timeout' => 600,
+            'command' => 'dmtxwrite'
         ));
 
         $resolver->setOptional(array(
@@ -112,11 +102,6 @@ class Writer extends AbstractDmtx
             $this->options['message-separator'],
             $this->messages
         );
-    }
-
-    protected function getCmd()
-    {
-        return 'dmtxwrite';
     }
 
     protected function getArgument($argument)

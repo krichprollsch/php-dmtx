@@ -3,11 +3,29 @@
 namespace Dmtx;
 
 use Symfony\Component\Process\ProcessBuilder;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 abstract class AbstractDmtx
 {
     protected $options = array();
     protected $arguments = array();
+    protected $messages = array();
+
+    public function __construct(array $options = array())
+    {
+        $this->messages = array();
+
+        $resolver = new OptionsResolver();
+        $this->setDefaultOptions($resolver);
+
+        $this->options = $resolver->resolve($options);
+    }
+
+    protected function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setRequired('command');
+    }
 
     protected function getArgument($argument)
     {
@@ -96,5 +114,10 @@ abstract class AbstractDmtx
         }
 
         return $process->getOutput();
+    }
+
+    protected function getCmd()
+    {
+        return $this->options['command'];
     }
 }

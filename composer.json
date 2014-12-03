@@ -1,7 +1,7 @@
 {
     "name": "ptachoire/php-dmtx",
     "description": "Datamatrix r/w based on libdmtx",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "require": {
         "symfony/process": "~2.5",
         "symfony/options-resolver": "~2.5"

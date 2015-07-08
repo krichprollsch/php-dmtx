@@ -4,14 +4,14 @@ Datamatrix reader/writer based on [libdmtx](http://www.libdmtx.org/).
 
 ## Install
 
-```
-composer install
+```sh
+composer require "ptachoire/php-dmtx:*"
 ```
 
 ## Usage
 
-```
-use Dmtx\Writer
+```php
+use Dmtx\Writer;
 
 $writer = new Writer();
 
@@ -24,8 +24,8 @@ echo $writer->encode('this is a message')
     ->dump();
 ```
 
-```
-use Dmtx\Reader
+```php
+use Dmtx\Reader;
 
 $reader = new Reader();
 
@@ -38,7 +38,8 @@ echo $reader->decodeFile('/tmp/image.png');
 
 ## Test
 
-```
+```sh
+composer install
 phpunit
 ```
 

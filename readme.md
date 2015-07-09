@@ -5,7 +5,7 @@ Datamatrix reader/writer based on [libdmtx](http://www.libdmtx.org/).
 ## Install
 
 ```sh
-composer install "ptachoire/php-dmtx:*"
+composer require "ptachoire/php-dmtx:*"
 ```
 
 ## Usage

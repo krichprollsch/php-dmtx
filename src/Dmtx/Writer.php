@@ -3,38 +3,37 @@
 namespace Dmtx;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class Writer extends AbstractDmtx
 {
-    protected $arguments = array(
+    protected $arguments = [
         'encoding',
         'module',
         'symbol-size',
         'format',
         'resolution',
-        'margin'
-    );
+        'margin',
+    ];
 
-    protected function setDefaultOptions(OptionsResolverInterface $resolver)
+    protected function setDefaultOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'encoding' => 'ascii',
             'module' => 5,
             'symbol-size' => 'square-auto',
             'format' => 'png',
             'message-separator' => ' ',
             'process-timeout' => 600,
-            'command' => 'dmtxwrite'
-        ));
+            'command' => 'dmtxwrite',
+        ]);
 
-        $resolver->setOptional(array(
+        $resolver->setDefined([
             'resolution',
-            'margin'
-        ));
+            'margin',
+        ]);
 
-        $resolver->setAllowedValues(array(
-            'encoding' => array(
+        $allowedValues = [
+            'encoding' => [
                 'best',
                 'fast',
                 'ascii',
@@ -42,28 +41,34 @@ class Writer extends AbstractDmtx
                 'text',
                 'x12',
                 'edifact',
-                '8base256'
-            ),
-            'format' => array(
+                '8base256',
+            ],
+            'format' => [
                 'png',
                 'tif',
                 'gif',
-                'pdf'
-            ),
-            'symbol-size' => array(
+                'pdf',
+            ],
+            'symbol-size' => [
                 'square-auto',
                 'rectangle-auto',
                 '10x10',
                 '24x24',
-                '64x64'
-            )
-        ));
+                '64x64',
+            ],
+        ];
+        foreach ($allowedValues as $option => $allowedValue) {
+            $resolver->setAllowedValues($option, $allowedValue);
+        }
 
-        $resolver->setAllowedTypes(array(
+        $allowedTypes = [
             'resolution' => 'integer',
             'module' => 'integer',
-            'margin' => 'integer'
-        ));
+            'margin' => 'integer',
+        ];
+        foreach ($allowedTypes as $option => $allowedType) {
+            $resolver->setAllowedTypes($option, $allowedTypes);
+        }
     }
 
     public function encode($message)

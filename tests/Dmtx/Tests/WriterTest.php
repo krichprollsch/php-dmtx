@@ -7,12 +7,14 @@ use Dmtx\Reader;
 
 class WriterTest extends TestCase
 {
+    /** @var Writer */
     private $writer;
+    /** @var Reader */
     private $reader;
 
     protected function setUp(
-        $options = array(),
-        $messages = array()
+        $options = [],
+        $messages = []
     ) {
         $this->writer = new Writer($options);
         $this->writer->encode($messages);
@@ -41,33 +43,36 @@ class WriterTest extends TestCase
 
     public function imageTestProvider()
     {
-        return array(
-            'simpleMessageShouldBeValid' => array(
-                array(
+        return [
+            'simpleMessageShouldBeValid' => [
+                [
                     'encoding' => 'ascii',
                     'module' => 5,
                     'symbol-size' => 'square-auto',
                     'format' => 'png'
-                ),
-                array('yo'),
+                ],
+                ['yo'],
                 'yo'
-            ),
-            'multiMessagesShouldBeValid' => array(
-                array(
+            ],
+            'multiMessagesShouldBeValid' => [
+                [
                     'encoding' => 'ascii',
                     'module' => 5,
                     'symbol-size' => 'square-auto',
                     'format' => 'png',
                     'message-separator' => ' '
-                ),
-                array('yo','this','is','a','message'),
+                ],
+                ['yo','this','is','a','message'],
                 'yo this is a message'
-            )
-        );
+            ]
+        ];
     }
 
     /**
      * @dataProvider imageTestProvider
+     * @param array $options
+     * @param array $messages
+     * @param $expected
      */
     public function testDumpShouldReturnValidImage(
         array $options,
@@ -86,6 +91,9 @@ class WriterTest extends TestCase
 
     /**
      * @dataProvider imageTestProvider
+     * @param array $options
+     * @param array $messages
+     * @param $expected
      */
     public function testSaveAsShouldCreateValidFile(
         array $options,

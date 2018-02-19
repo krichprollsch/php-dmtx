@@ -40,7 +40,7 @@ echo $reader->decodeFile('/tmp/image.png');
 
 ```sh
 composer install
-phpunit
+./vendor/bin/phpunit
 ```
 
 ## Credits

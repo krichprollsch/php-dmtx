@@ -2,8 +2,11 @@
     "name": "ptachoire/php-dmtx",
     "description": "Datamatrix r/w based on libdmtx <http://www.libdmtx.org/>",
     "require": {
-        "symfony/process": "~2.5",
-        "symfony/options-resolver": "~2.5"
+        "symfony/process": "~3.4||~4.0",
+        "symfony/options-resolver": "~3.4||~4.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~5.7"
     },
     "autoload": {
         "psr-0": { "Dmtx": "src/" }

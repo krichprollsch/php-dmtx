@@ -3,12 +3,10 @@
 namespace Dmtx;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Process\ProcessBuilder;
 
 class Reader extends AbstractDmtx
 {
-    protected $arguments = array(
+    protected $arguments = [
         'newline',
         'unicode',
         'milliseconds',
@@ -32,19 +30,19 @@ class Reader extends AbstractDmtx
         'page-numbers',
         'corners',
         'shrink'
-    );
+    ];
 
-    protected function setDefaultOptions(OptionsResolverInterface $resolver)
+    protected function setDefaultOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'unicode' => true,
             'milliseconds' => 200,
             'symbol-size' => 'square-auto',
             'process-timeout' => 600,
             'command' => 'dmtxread'
-        ));
+        ]);
 
-        $resolver->setOptional(array(
+        $resolver->setDefined([
             'newline',
             'unicode',
             'milliseconds',
@@ -68,19 +66,22 @@ class Reader extends AbstractDmtx
             'page-numbers',
             'corners',
             'shrink'
-        ));
+        ]);
 
-        $resolver->setAllowedValues(array(
-            'symbol-size' => array(
+        $allowedValues = [
+            'symbol-size' => [
                 'square-auto',
                 'rectangle-auto',
                 '10x10',
                 '24x24',
                 '64x64'
-            )
-        ));
+            ],
+        ];
+        foreach ($allowedValues as $option => $allowedValue) {
+            $resolver->setAllowedValues($option, $allowedValue);
+        }
 
-        $resolver->setAllowedTypes(array(
+        $allowedTypes = [
             'newline' => 'bool',
             'unicode' => 'bool',
             'milliseconds' => 'integer',
@@ -99,8 +100,10 @@ class Reader extends AbstractDmtx
             'page-numbers' => 'bool',
             'corners' => 'bool',
             'shrink' => 'integer'
-
-        ));
+        ];
+        foreach ($allowedTypes as $option => $allowedType) {
+            $resolver->setAllowedTypes($option, $allowedTypes);
+        }
     }
 
     public function decode($encoded_string)
@@ -120,9 +123,9 @@ class Reader extends AbstractDmtx
     }
 
 
-    public function processBuilder()
+    public function process()
     {
-        return $this->getProcessBuilder(
+        return $this->getProcess(
             $this->getCmd()
         );
     }

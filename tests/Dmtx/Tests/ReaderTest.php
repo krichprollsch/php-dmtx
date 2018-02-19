@@ -6,32 +6,36 @@ use Dmtx\Reader;
 
 class ReaderTest extends TestCase
 {
+    /** @var Reader */
     private $reader;
 
     protected function setUp(
-        $options = array()
+        $options = []
     ) {
         $this->reader = new Reader($options);
     }
 
     public function imageTestProvider()
     {
-        return array(
-            'simpleMessageShouldBeValid' => array(
-                array(),
-                array('yo'),
+        return [
+            'simpleMessageShouldBeValid' => [
+                [],
+                ['yo'],
                 dirname(__FILE__).'/rsc/yo.png'
-            ),
-            'multiMessagesShouldBeValid' => array(
-                array(),
-                array('yo','this','is','a','message'),
+            ],
+            'multiMessagesShouldBeValid' => [
+                [],
+                ['yo','this','is','a','message'],
                 dirname(__FILE__).'/rsc/yos.png'
-            )
-        );
+            ]
+        ];
     }
 
     /**
      * @dataProvider imageTestProvider
+     * @param array $options
+     * @param array $expected_messages
+     * @param $filename
      */
     public function testDecodeShouldReturnValidMessage(
         array $options,
@@ -48,6 +52,9 @@ class ReaderTest extends TestCase
 
     /**
      * @dataProvider imageTestProvider
+     * @param array $options
+     * @param array $expected_messages
+     * @param $filename
      */
     public function testDecodeFileShouldReturnValidMessage(
         array $options,

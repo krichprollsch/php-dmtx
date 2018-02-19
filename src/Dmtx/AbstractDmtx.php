@@ -2,19 +2,19 @@
 
 namespace Dmtx;
 
-use Symfony\Component\Process\ProcessBuilder;
+use Symfony\Component\Process\Process;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
 
 abstract class AbstractDmtx
 {
-    protected $options = array();
-    protected $arguments = array();
-    protected $messages = array();
+    protected $options = [];
+    protected $arguments = [];
+    protected $messages = [];
 
-    public function __construct(array $options = array())
+    public function __construct(array $options = [])
     {
-        $this->messages = array();
+        $this->messages = [];
 
         $resolver = new OptionsResolver();
         $this->setDefaultOptions($resolver);
@@ -22,7 +22,7 @@ abstract class AbstractDmtx
         $this->options = $resolver->resolve($options);
     }
 
-    protected function setDefaultOptions(OptionsResolverInterface $resolver)
+    protected function setDefaultOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired('command');
     }
@@ -41,19 +41,15 @@ abstract class AbstractDmtx
         return $this->options[$argument];
     }
 
-    protected function getProcessBuilder($cmd, array $extras = array(), $input = null)
+    protected function getProcess($cmd, array $extras = [], $input = null)
     {
-        $builder = new ProcessBuilder();
-        $builder->add($cmd);
-        $builder->setTimeout($this->options['process-timeout']);
+        $cmdArguments = [$cmd];
 
         foreach ($this->arguments as $argument) {
             try {
-                $builder->add(
-                    $this->getFormattedParameter(
-                        $argument,
-                        $this->getArgument($argument)
-                    )
+                $cmdArguments[] = $this->getFormattedParameter(
+                    $argument,
+                    $this->getArgument($argument)
                 );
             } catch (\InvalidArgumentException $ex) {
                 //nothing here
@@ -62,24 +58,22 @@ abstract class AbstractDmtx
 
         foreach ($extras as $key => $value) {
             try {
-                $builder->add(
-                    $this->getFormattedParameter(
-                        $key,
-                        $value
-                    )
-                );
+                $cmdArguments[] = $this->getFormattedParameter($key, $value);
             } catch (\InvalidArgumentException $ex) {
                 //nothing here
             }
         }
 
+        $process = new Process($cmdArguments);
+        $process->setTimeout($this->options['process-timeout']);
+
         if (!is_null($input)) {
-            $builder->setInput(
+            $process->setInput(
                 $input
             );
         }
 
-        return $builder;
+        return $process;
     }
 
     private function getFormattedParameter($key, $value)
@@ -101,11 +95,9 @@ abstract class AbstractDmtx
         return null;
     }
 
-    protected function run($cmd, $input = null, array $extras = array())
+    protected function run($cmd, $input = null, array $extras = [])
     {
-        $process = $this
-            ->getProcessBuilder($cmd, $extras, $input)
-            ->getProcess();
+        $process = $this->getProcess($cmd, $extras, $input);
 
         $process->run();
 

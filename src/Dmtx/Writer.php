@@ -13,6 +13,7 @@ class Writer extends AbstractDmtx
         'format',
         'resolution',
         'margin',
+        'gs1',
     ];
 
     protected function setDefaultOptions(OptionsResolver $resolver)
@@ -24,6 +25,7 @@ class Writer extends AbstractDmtx
             'format' => 'png',
             'message-separator' => ' ',
             'process-timeout' => 600,
+            'gs1' => null,
             'command' => 'dmtxwrite',
         ]);
 

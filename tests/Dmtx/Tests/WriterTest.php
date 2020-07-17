@@ -19,7 +19,7 @@ class WriterTest extends TestCase
     /** @var array */
     private $messages;
 
-    protected function setUp() {
+    protected function setUp(): void {
         $this->writer = new Writer($this->options ?? []);
         $this->writer->encode($this->messages ?? []);
 

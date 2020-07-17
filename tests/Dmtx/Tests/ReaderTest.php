@@ -12,7 +12,7 @@ class ReaderTest extends TestCase
     /** @var array */
     private $options;
 
-    protected function setUp() {
+    protected function setUp(): void {
         $this->reader = new Reader($this->options ?? []);
     }
 

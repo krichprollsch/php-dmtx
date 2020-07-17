@@ -9,10 +9,11 @@ class ReaderTest extends TestCase
     /** @var Reader */
     private $reader;
 
-    protected function setUp(
-        $options = []
-    ) {
-        $this->reader = new Reader($options);
+    /** @var array */
+    private $options;
+
+    protected function setUp() {
+        $this->reader = new Reader($this->options ?? []);
     }
 
     public function imageTestProvider()
@@ -42,7 +43,8 @@ class ReaderTest extends TestCase
         array $expected_messages,
         $filename
     ) {
-        $this->setUp($options);
+        $this->options = $options;
+        $this->setUp();
 
         $this->assertEquals(
             implode(" ", $expected_messages),
@@ -61,7 +63,8 @@ class ReaderTest extends TestCase
         array $expected_messages,
         $filename
     ) {
-        $this->setUp($options);
+        $this->options = $options;
+        $this->setUp();
 
         $this->assertEquals(
             implode(" ", $expected_messages),

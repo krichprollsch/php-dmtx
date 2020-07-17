@@ -9,15 +9,19 @@ class WriterTest extends TestCase
 {
     /** @var Writer */
     private $writer;
+
     /** @var Reader */
     private $reader;
 
-    protected function setUp(
-        $options = [],
-        $messages = []
-    ) {
-        $this->writer = new Writer($options);
-        $this->writer->encode($messages);
+    /** @var array */
+    private $options;
+
+    /** @var array */
+    private $messages;
+
+    protected function setUp() {
+        $this->writer = new Writer($this->options ?? []);
+        $this->writer->encode($this->messages ?? []);
 
         $this->reader = new Reader();
     }
@@ -79,7 +83,9 @@ class WriterTest extends TestCase
         array $messages,
         $expected
     ) {
-        $this->setUp($options, $messages);
+        $this->options = $options;
+        $this->messages = $messages;
+        $this->setUp();
 
         $this->assertEquals(
             $expected,
@@ -100,7 +106,9 @@ class WriterTest extends TestCase
         array $messages,
         $expected
     ) {
-        $this->setUp($options, $messages);
+        $this->options = $options;
+        $this->messages = $messages;
+        $this->setUp();
 
         $tmpfile = tempnam(sys_get_temp_dir(), 'dmtx-test-unit-').'.png';
 

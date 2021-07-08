@@ -1,6 +1,8 @@
 # php-dmtx
 
-Datamatrix reader/writer based on [libdmtx](http://www.libdmtx.org/).
+Datamatrix reader/writer based on [libdmtx](https://github.com/dmtx).
+
+⚠️ The installation of [dmtx-utils](https://github.com/dmtx/dmtx-utils) is required to use the lib.
 
 ## Install
 

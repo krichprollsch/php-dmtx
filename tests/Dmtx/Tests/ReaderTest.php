@@ -16,7 +16,7 @@ class ReaderTest extends TestCase
         $this->reader = new Reader($this->options ?? []);
     }
 
-    public function imageTestProvider()
+    public static function imageTestProvider()
     {
         return [
             'simpleMessageShouldBeValid' => [

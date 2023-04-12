@@ -45,7 +45,7 @@ class WriterTest extends TestCase
         );
     }
 
-    public function imageTestProvider()
+    public static function imageTestProvider()
     {
         return [
             'simpleMessageShouldBeValid' => [
